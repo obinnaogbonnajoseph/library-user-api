@@ -1,9 +1,10 @@
-package com.obinna.bucketlist.entity;
+package com.obinna.bucketlist.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import java.util.List;
 
 @ApiModel(description = "user entity that creates bucket list")
 @Entity
@@ -24,6 +25,10 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    @ApiModelProperty(notes = "username of user")
+    @Column(name = "username")
+    private String username;
+
     @ApiModelProperty(notes = "email of user")
     @Column(name = "email")
     private String email;
@@ -33,8 +38,12 @@ public class User {
     private String password;
 
     @ApiModelProperty(notes = "bucket list created by the user")
-    @OneToOne(mappedBy = "user")
+    @OneToOne
     private BucketList bucketList;
+
+    @ApiModelProperty(notes = "roles assigned to user")
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Role> roles;
 
     public int getId() {
         return id;
@@ -60,6 +69,10 @@ public class User {
         this.lastName = lastName;
     }
 
+    public String getUsername() { return username; }
+
+    public void setUsername(String username) { this.username = username; }
+
     public String getEmail() {
         return email;
     }
@@ -79,4 +92,12 @@ public class User {
     public BucketList getBucketList() { return bucketList; }
 
     public void setBucketList(BucketList bucketList) { this.bucketList = bucketList; }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
 }

@@ -1,4 +1,4 @@
-package com.obinna.bucketlist.entity;
+package com.obinna.bucketlist.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,7 +23,7 @@ public class BucketListItem {
     @Column(name = "name")
     private String name;
 
-    @ApiModelProperty(notes = "date of creation of bucket list item")
+    /*@ApiModelProperty(notes = "date of creation of bucket list item")
     @Column(name = "date_created")
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
@@ -33,7 +33,7 @@ public class BucketListItem {
     @Column(name = "date_modified")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp dateModified;
+    private Timestamp dateModified;*/
 
     @ApiModelProperty(notes = "boolean to show if item is done or not")
     @Column(name = "done")
@@ -55,7 +55,7 @@ public class BucketListItem {
         this.name = name;
     }
 
-    public Timestamp getDateCreated() {
+    /*public Timestamp getDateCreated() {
         return dateCreated;
     }
 
@@ -69,7 +69,7 @@ public class BucketListItem {
 
     public void setDateModified(Timestamp dateModified) {
         this.dateModified = dateModified;
-    }
+    }*/
 
     public boolean isDone() {
         return done;

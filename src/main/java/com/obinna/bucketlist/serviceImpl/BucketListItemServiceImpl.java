@@ -1,16 +1,14 @@
 package com.obinna.bucketlist.serviceImpl;
 
 import com.obinna.bucketlist.dto.BucketListItemDto;
-import com.obinna.bucketlist.entity.BucketListItem;
+import com.obinna.bucketlist.model.BucketListItem;
 import com.obinna.bucketlist.repository.BucketListItemRepository;
 import com.obinna.bucketlist.service.BucketListItemService;
 import com.obinna.bucketlist.utils.NotCreatedException;
 import com.obinna.bucketlist.utils.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -26,9 +24,9 @@ public class BucketListItemServiceImpl implements BucketListItemService {
     public BucketListItem createItem(BucketListItemDto dto) throws NotCreatedException {
         BucketListItem item = new BucketListItem();
         item.setName(dto.getName());
-        item.setDateCreated(dto.getDateCreated());
+//        item.setDateCreated(dto.getDateCreated());
         item.setDone(false);
-        item.setDateModified(new Timestamp(new Date().getTime()));
+//        item.setDateModified(new Timestamp(new Date().getTime()));
         itemRepository.save(item);
         if(item.getId() >= 0) {
             return item;
@@ -42,7 +40,7 @@ public class BucketListItemServiceImpl implements BucketListItemService {
                 .orElseThrow(() -> new ResourceNotFoundException("Bucket List Item does not exist"));
         item.setDone(dto.isDone());
         item.setName(dto.getName());
-        item.setDateModified(new Timestamp(new Date().getTime()));
+//        item.setDateModified(new Timestamp(new Date().getTime()));
         itemRepository.save(item);
         return item;
     }

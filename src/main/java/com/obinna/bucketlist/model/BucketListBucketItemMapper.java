@@ -1,4 +1,4 @@
-package com.obinna.bucketlist.entity;
+package com.obinna.bucketlist.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

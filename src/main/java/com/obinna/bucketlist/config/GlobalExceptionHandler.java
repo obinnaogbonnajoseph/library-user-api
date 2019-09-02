@@ -1,5 +1,6 @@
 package com.obinna.bucketlist.config;
 
+import com.obinna.bucketlist.utils.CustomException;
 import com.obinna.bucketlist.utils.ErrorDetails;
 import com.obinna.bucketlist.utils.NotCreatedException;
 import com.obinna.bucketlist.utils.ResourceNotFoundException;
@@ -22,6 +23,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotCreatedException.class)
     public ResponseEntity<ErrorDetails> notCreatedException(NotCreatedException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorDetails> customException(CustomException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, ex.getHttpStatus());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDetails> handleException(Exception ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getLocalizedMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 }

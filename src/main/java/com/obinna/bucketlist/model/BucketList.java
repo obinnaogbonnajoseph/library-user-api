@@ -1,4 +1,4 @@
-package com.obinna.bucketlist.entity;
+package com.obinna.bucketlist.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -33,7 +33,7 @@ public class BucketList {
     )
     private List<BucketListItem> items;
 
-    @ApiModelProperty(notes = "date of creation of bucket list")
+    /*@ApiModelProperty(notes = "date of creation of bucket list")
     @Column(name = "date_created")
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
@@ -43,11 +43,11 @@ public class BucketList {
     @Column(name = "date_modified")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp dateModified;
+    private Timestamp dateModified;*/
 
     @ApiModelProperty(notes = "details of user that created bucket list")
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="user_fk")
+    @JoinColumn(name="user_id")
     private User createdBy;
 
     public int getId() {
@@ -74,7 +74,7 @@ public class BucketList {
         this.items = items;
     }
 
-    public Timestamp getDateCreated() {
+    /*public Timestamp getDateCreated() {
         return dateCreated;
     }
 
@@ -88,7 +88,7 @@ public class BucketList {
 
     public void setDateModified(Timestamp dateModified) {
         this.dateModified = dateModified;
-    }
+    }*/
 
     public User getCreatedBy() {
         return createdBy;

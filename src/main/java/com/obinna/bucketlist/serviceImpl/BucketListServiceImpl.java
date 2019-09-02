@@ -2,9 +2,9 @@ package com.obinna.bucketlist.serviceImpl;
 
 import com.obinna.bucketlist.dto.BucketListDto;
 import com.obinna.bucketlist.dto.BucketListItemDto;
-import com.obinna.bucketlist.entity.BucketList;
-import com.obinna.bucketlist.entity.BucketListItem;
-import com.obinna.bucketlist.entity.User;
+import com.obinna.bucketlist.model.BucketList;
+import com.obinna.bucketlist.model.BucketListItem;
+import com.obinna.bucketlist.model.User;
 import com.obinna.bucketlist.repository.BucketListItemRepository;
 import com.obinna.bucketlist.repository.BucketListRepository;
 import com.obinna.bucketlist.repository.UserRepository;
@@ -18,10 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,8 +44,8 @@ public class BucketListServiceImpl implements BucketListService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Bucketlist cannot be created. The user does not exist"));
         bucketList.setCreatedBy(user);
-        bucketList.setDateCreated(dto.getDateCreated());
-        bucketList.setDateModified(new Timestamp(new Date().getTime()));
+//        bucketList.setDateCreated(dto.getDateCreated());
+//        bucketList.setDateModified(new Timestamp(new Date().getTime()));
         bucketList.setName(dto.getName());
         List<BucketListItem> itemList = new ArrayList<>();
         dto.getItems().forEach(item -> {
@@ -88,8 +85,8 @@ public class BucketListServiceImpl implements BucketListService {
 
             List<BucketListItem> items = new ArrayList<>();
             itemList.forEach(item -> items.add(itemRepository.findById(item).orElse(null))); // add bucket items to a list
-            items.removeAll(Collections.singleton(null)); // remove all null values from the collection
-            bucketList.setItems(items);
+//            items.removeAll(Collections.singleton(null)); // remove all null values from the collection
+            bucketList.setItems(items.stream().filter(Objects::nonNull).collect(Collectors.toList()));
         }
         dto.setDateModified(new Timestamp(new Date().getTime()));
         bucketListRepository.save(bucketList);

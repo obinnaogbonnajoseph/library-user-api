@@ -2,8 +2,8 @@ package com.obinna.bucketlist.controller;
 
 import com.obinna.bucketlist.dto.BucketListDto;
 import com.obinna.bucketlist.dto.BucketListItemDto;
-import com.obinna.bucketlist.entity.BucketList;
-import com.obinna.bucketlist.entity.BucketListItem;
+import com.obinna.bucketlist.model.BucketList;
+import com.obinna.bucketlist.model.BucketListItem;
 import com.obinna.bucketlist.repository.BucketListItemRepository;
 import com.obinna.bucketlist.repository.BucketListRepository;
 import com.obinna.bucketlist.service.BucketListItemService;

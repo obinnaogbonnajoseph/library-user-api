@@ -1,7 +1,7 @@
 package com.obinna.bucketlist.service;
 
 import com.obinna.bucketlist.dto.BucketListDto;
-import com.obinna.bucketlist.entity.BucketList;
+import com.obinna.bucketlist.model.BucketList;
 import com.obinna.bucketlist.utils.NotCreatedException;
 import com.obinna.bucketlist.utils.ResourceNotFoundException;
 
