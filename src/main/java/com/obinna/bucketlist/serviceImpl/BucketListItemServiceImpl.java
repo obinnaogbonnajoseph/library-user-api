@@ -24,9 +24,9 @@ public class BucketListItemServiceImpl implements BucketListItemService {
     public BucketListItem createItem(BucketListItemDto dto) throws NotCreatedException {
         BucketListItem item = new BucketListItem();
         item.setName(dto.getName());
-//        item.setDateCreated(dto.getDateCreated());
+        item.setDateCreated(dto.getDateCreated());
         item.setDone(false);
-//        item.setDateModified(new Timestamp(new Date().getTime()));
+        item.setDateModified(new Date());
         itemRepository.save(item);
         if(item.getId() >= 0) {
             return item;
@@ -40,7 +40,7 @@ public class BucketListItemServiceImpl implements BucketListItemService {
                 .orElseThrow(() -> new ResourceNotFoundException("Bucket List Item does not exist"));
         item.setDone(dto.isDone());
         item.setName(dto.getName());
-//        item.setDateModified(new Timestamp(new Date().getTime()));
+        item.setDateModified(new Timestamp(new Date().getTime()));
         itemRepository.save(item);
         return item;
     }

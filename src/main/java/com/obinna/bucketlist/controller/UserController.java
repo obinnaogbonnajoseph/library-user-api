@@ -4,7 +4,6 @@ import com.obinna.bucketlist.dto.UserDto;
 import com.obinna.bucketlist.model.User;
 import com.obinna.bucketlist.service.UserService;
 import io.swagger.annotations.*;
-import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

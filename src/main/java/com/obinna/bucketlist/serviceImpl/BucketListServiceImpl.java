@@ -44,8 +44,8 @@ public class BucketListServiceImpl implements BucketListService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Bucketlist cannot be created. The user does not exist"));
         bucketList.setCreatedBy(user);
-//        bucketList.setDateCreated(dto.getDateCreated());
-//        bucketList.setDateModified(new Timestamp(new Date().getTime()));
+        bucketList.setDateCreated(dto.getDateCreated());
+        bucketList.setDateModified(new Date());
         bucketList.setName(dto.getName());
         List<BucketListItem> itemList = new ArrayList<>();
         dto.getItems().forEach(item -> {
@@ -76,7 +76,7 @@ public class BucketListServiceImpl implements BucketListService {
             bucketList.setName(dto.getName());
         }
         if(dto.getItems() != null && dto.getItems().size() > 0) {
-            // first filter item dtos by their ids, and then find the corresponding items with their ids
+//             first filter item dtos by their ids, and then find the corresponding items with their ids
             List<Integer> itemList = dto.getItems().stream()
                     .filter(it -> it.getId() >= 0) // filter only items with id
                     .map(BucketListItemDto::getId) // get their ids
@@ -85,7 +85,7 @@ public class BucketListServiceImpl implements BucketListService {
 
             List<BucketListItem> items = new ArrayList<>();
             itemList.forEach(item -> items.add(itemRepository.findById(item).orElse(null))); // add bucket items to a list
-//            items.removeAll(Collections.singleton(null)); // remove all null values from the collection
+            items.removeAll(Collections.singleton(null)); // remove all null values from the collection
             bucketList.setItems(items.stream().filter(Objects::nonNull).collect(Collectors.toList()));
         }
         dto.setDateModified(new Timestamp(new Date().getTime()));

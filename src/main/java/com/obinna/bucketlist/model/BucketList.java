@@ -6,7 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -33,17 +33,17 @@ public class BucketList {
     )
     private List<BucketListItem> items;
 
-    /*@ApiModelProperty(notes = "date of creation of bucket list")
+    @ApiModelProperty(notes = "date of creation of bucket list")
     @Column(name = "date_created")
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp dateCreated;
+    private Date dateCreated;
 
     @ApiModelProperty(notes = "date of modification of bucket list")
     @Column(name = "date_modified")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp dateModified;*/
+    private Date dateModified;
 
     @ApiModelProperty(notes = "details of user that created bucket list")
     @OneToOne(cascade = CascadeType.ALL)
@@ -74,21 +74,21 @@ public class BucketList {
         this.items = items;
     }
 
-    /*public Timestamp getDateCreated() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Timestamp dateCreated) {
+    public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public Timestamp getDateModified() {
+    public Date getDateModified() {
         return dateModified;
     }
 
-    public void setDateModified(Timestamp dateModified) {
+    public void setDateModified(Date dateModified) {
         this.dateModified = dateModified;
-    }*/
+    }
 
     public User getCreatedBy() {
         return createdBy;

@@ -1,6 +1,7 @@
 package com.obinna.bucketlist.dto;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 public class BucketListDto {
@@ -9,9 +10,9 @@ public class BucketListDto {
 
     private String name;
 
-    private Timestamp dateCreated;
+    private Date dateCreated;
 
-    private Timestamp dateModified;
+    private Date dateModified;
 
     private List<BucketListItemDto> items;
 
@@ -29,15 +30,15 @@ public class BucketListDto {
         this.name = name;
     }
 
-    public Timestamp getDateCreated() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Timestamp dateCreated) {
+    public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public Timestamp getDateModified() {
+    public Date getDateModified() {
         return dateModified;
     }
 

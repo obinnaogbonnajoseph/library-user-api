@@ -6,7 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @ApiModel(description = "Bucket list item entity")
@@ -23,17 +23,17 @@ public class BucketListItem {
     @Column(name = "name")
     private String name;
 
-    /*@ApiModelProperty(notes = "date of creation of bucket list item")
+    @ApiModelProperty(notes = "date of creation of bucket list item")
     @Column(name = "date_created")
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    private Timestamp dateCreated;
+    private Date dateCreated;
 
     @ApiModelProperty(notes = "last date of modification of bucket list item")
     @Column(name = "date_modified")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp dateModified;*/
+    private Date dateModified;
 
     @ApiModelProperty(notes = "boolean to show if item is done or not")
     @Column(name = "done")
@@ -55,21 +55,21 @@ public class BucketListItem {
         this.name = name;
     }
 
-    /*public Timestamp getDateCreated() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Timestamp dateCreated) {
+    public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public Timestamp getDateModified() {
+    public Date getDateModified() {
         return dateModified;
     }
 
-    public void setDateModified(Timestamp dateModified) {
+    public void setDateModified(Date dateModified) {
         this.dateModified = dateModified;
-    }*/
+    }
 
     public boolean isDone() {
         return done;
