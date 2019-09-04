@@ -18,10 +18,10 @@ public class BucketList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @ApiModelProperty(notes = "name of bucket list entity")
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @ApiModelProperty(notes = "list of items attached to a particular bucket list")
@@ -34,27 +34,27 @@ public class BucketList {
     private List<BucketListItem> items;
 
     @ApiModelProperty(notes = "date of creation of bucket list")
-    @Column(name = "date_created")
+    @Column(name = "date_created", nullable = false)
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
 
     @ApiModelProperty(notes = "date of modification of bucket list")
-    @Column(name = "date_modified")
+    @Column(name = "date_modified", nullable = false)
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateModified;
 
     @ApiModelProperty(notes = "details of user that created bucket list")
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id", nullable = false)
     private User createdBy;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

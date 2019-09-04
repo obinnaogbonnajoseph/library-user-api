@@ -17,20 +17,20 @@ public class BucketListItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @ApiModelProperty(notes = "name of bucket list item")
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @ApiModelProperty(notes = "date of creation of bucket list item")
-    @Column(name = "date_created")
+    @Column(name = "date_created", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     private Date dateCreated;
 
     @ApiModelProperty(notes = "last date of modification of bucket list item")
-    @Column(name = "date_modified")
+    @Column(name = "date_modified", nullable = false)
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateModified;
@@ -39,11 +39,11 @@ public class BucketListItem {
     @Column(name = "done")
     private boolean done;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

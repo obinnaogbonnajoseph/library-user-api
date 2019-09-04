@@ -11,7 +11,7 @@ public interface BucketListService {
 
     BucketList updateBucketList(BucketListDto dto) throws ResourceNotFoundException;
 
-    void deleteBucketList(int id) throws ResourceNotFoundException;
+    void deleteBucketList(Long id) throws ResourceNotFoundException;
 
 
 }

@@ -1,26 +1,32 @@
 package com.obinna.bucketlist.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
 public class BucketListDto {
 
-    private int id;
+    private Long id;
 
+    @NotBlank
     private String name;
 
+    @NotNull
     private Date dateCreated;
 
+    @NotNull
     private Date dateModified;
 
     private List<BucketListItemDto> items;
 
-    private int createdBy;
+    @NotNull
+    private Long createdBy;
 
-    public int getId() { return id; }
+    public Long getId() { return id; }
 
-    public void setId(int id) { this.id = id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getName() {
         return name;
@@ -42,7 +48,7 @@ public class BucketListDto {
         return dateModified;
     }
 
-    public void setDateModified(Timestamp dateModified) {
+    public void setDateModified(Date dateModified) {
         this.dateModified = dateModified;
     }
 
@@ -54,11 +60,11 @@ public class BucketListDto {
         this.items = items;
     }
 
-    public int getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(int createdBy) {
+    public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
 }

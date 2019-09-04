@@ -1,5 +1,6 @@
 package com.obinna.bucketlist.controller;
 
+import com.obinna.bucketlist.dto.LoginRequestDto;
 import com.obinna.bucketlist.dto.UserDto;
 import com.obinna.bucketlist.model.User;
 import com.obinna.bucketlist.service.UserService;
@@ -26,9 +27,8 @@ public class UserController {
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 422, message = "Invalid username/password supplied")})
     public ResponseEntity<String> login(//
-                                        @ApiParam("Username") @RequestParam String username, //
-                                        @ApiParam("Password") @RequestParam String password) {
-        return ResponseEntity.ok(userService.signIn(username, password));
+                                        @ApiParam("Login User") @RequestBody LoginRequestDto requestDto) {
+        return ResponseEntity.ok(userService.signIn(requestDto));
     }
 
     @PostMapping("/sign-up")

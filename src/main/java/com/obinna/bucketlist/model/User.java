@@ -8,14 +8,14 @@ import java.util.List;
 
 @ApiModel(description = "user entity that creates bucket list")
 @Entity
-@Table(name = "user")
+@Table(name = "bucket_user")
 public class User {
 
     @ApiModelProperty(notes = "primary key of user entity")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @ApiModelProperty(notes = "first name of user")
     @Column(name = "first_name")
@@ -26,7 +26,7 @@ public class User {
     private String lastName;
 
     @ApiModelProperty(notes = "username of user")
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
 
     @ApiModelProperty(notes = "email of user")
@@ -34,22 +34,22 @@ public class User {
     private String email;
 
     @ApiModelProperty(notes = "encrypted password of user")
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @ApiModelProperty(notes = "bucket list created by the user")
-    @OneToOne
+    @OneToOne(mappedBy = "createdBy")
     private BucketList bucketList;
 
     @ApiModelProperty(notes = "roles assigned to user")
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> roles;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

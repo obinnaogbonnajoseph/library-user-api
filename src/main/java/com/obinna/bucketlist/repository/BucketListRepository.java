@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BucketListRepository extends JpaRepository<BucketList, Integer> {
+public interface BucketListRepository extends JpaRepository<BucketList, Long> {
 
     List<BucketList> findAllByNameContaining(@Param("name") String name, Pageable pageable);
 }

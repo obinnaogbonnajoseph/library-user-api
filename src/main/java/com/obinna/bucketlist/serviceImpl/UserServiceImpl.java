@@ -1,5 +1,6 @@
 package com.obinna.bucketlist.serviceImpl;
 
+import com.obinna.bucketlist.dto.LoginRequestDto;
 import com.obinna.bucketlist.model.User;
 import com.obinna.bucketlist.repository.UserRepository;
 import com.obinna.bucketlist.security.JwtTokenProvider;
@@ -31,14 +32,16 @@ public class UserServiceImpl implements UserService {
     private AuthenticationManager authenticationManager;
 
     @Override
-    public String signIn(String username, String password) {
+    public String signIn(LoginRequestDto requestDto) {
+        String username = requestDto.getUsername();
+        String password = requestDto.getPassword();
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             return jwtTokenProvider.createToken(username, userRepository.findByUsername(username)
                     .orElseThrow(() -> new CustomException("User with username: '" + username + "' does not exist", HttpStatus.NOT_FOUND))
                     .getRoles());
         } catch (AuthenticationException e) {
-            throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
+            throw new CustomException("Invalid username/password supplied", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -47,9 +50,11 @@ public class UserServiceImpl implements UserService {
         if (!userRepository.findByUsername(user.getUsername()).isPresent()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
-            return jwtTokenProvider.createToken(user.getUsername(), user.getRoles());
+            if(user.getId() >= 0) {
+                return jwtTokenProvider.createToken(user.getUsername(), user.getRoles());
+            } else throw new CustomException("User could not be created", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
-            throw new CustomException("Username is already in use", HttpStatus.UNPROCESSABLE_ENTITY);
+            throw new CustomException("Username is already in use", HttpStatus.BAD_REQUEST);
         }
     }
 

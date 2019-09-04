@@ -57,7 +57,7 @@ public class BucketListServiceImpl implements BucketListService {
             } catch (NotCreatedException e) {
                 e.printStackTrace();
             }
-            if(bucketItem.getId() >= 0) {
+            if(bucketItem != null && bucketItem.getId() != null) {
                 itemList.add(bucketItem);
             }
         });
@@ -77,8 +77,8 @@ public class BucketListServiceImpl implements BucketListService {
         }
         if(dto.getItems() != null && dto.getItems().size() > 0) {
 //             first filter item dtos by their ids, and then find the corresponding items with their ids
-            List<Integer> itemList = dto.getItems().stream()
-                    .filter(it -> it.getId() >= 0) // filter only items with id
+            List<Long> itemList = dto.getItems().stream()
+                    .filter(it -> it.getId() != null) // filter only items with id
                     .map(BucketListItemDto::getId) // get their ids
                     .filter(id -> itemRepository.findById(id).isPresent()) // check if the ids are valid in db
                     .collect(Collectors.toList());
@@ -94,7 +94,7 @@ public class BucketListServiceImpl implements BucketListService {
     }
 
     @Override
-    public void deleteBucketList(int id) throws ResourceNotFoundException {
+    public void deleteBucketList(Long id) throws ResourceNotFoundException {
         BucketList bucketList = bucketListRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Bucketlist not found"));
         bucketListRepository.delete(bucketList);

@@ -28,7 +28,7 @@ public class BucketListItemServiceImpl implements BucketListItemService {
         item.setDone(false);
         item.setDateModified(new Date());
         itemRepository.save(item);
-        if(item.getId() >= 0) {
+        if(item.getId() != null) {
             return item;
         }
         throw new NotCreatedException("Bucket List Item could not be created");
@@ -46,7 +46,7 @@ public class BucketListItemServiceImpl implements BucketListItemService {
     }
 
     @Override
-    public void deleteItem(int id) throws ResourceNotFoundException {
+    public void deleteItem(Long id) throws ResourceNotFoundException {
         BucketListItem item = itemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Bucket List Item does not exist"));
         itemRepository.delete(item);

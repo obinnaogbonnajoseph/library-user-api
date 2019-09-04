@@ -73,7 +73,7 @@ public class BucketListController {
     @ApiOperation(value = "fetch single bucket list", response = BucketList.class)
     @GetMapping("{id}")
     public ResponseEntity<BucketList> getBucketList(@ApiParam(value = "bucket list id", required = true)
-                                                        @PathVariable("id") Integer bucketListId) throws ResourceNotFoundException {
+                                                        @PathVariable("id") Long bucketListId) throws ResourceNotFoundException {
         return ResponseEntity.ok(bucketListRepository.findById(bucketListId)
                 .orElseThrow(() -> new ResourceNotFoundException("Bucket List does not exist")));
     }
@@ -81,17 +81,17 @@ public class BucketListController {
     @ApiOperation(value = "update bucket list", response = BucketList.class)
     @PutMapping("{id}")
     public ResponseEntity<BucketList> updateBucketList(@ApiParam(value = "bucket list id", required = true)
-                                                           @PathVariable("id") Integer bucketListId,
+                                                           @PathVariable("id") Long bucketListId,
                                                        @ApiParam(value = "bucket list request body", required = true)
                                                             @Valid @RequestBody BucketListDto dto) throws ResourceNotFoundException {
         dto.setId(bucketListId);
         return ResponseEntity.ok(bucketListService.updateBucketList(dto));
     }
 
-    @ApiOperation(value = "delete bucket list")
+    @ApiOperation(value = "delete bucket list", response = String.class)
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteBucketList(@ApiParam(value = "bucket list id", required = true)
-                                                  @PathVariable("id") Integer bucketListId) throws ResourceNotFoundException {
+                                                  @PathVariable("id") Long bucketListId) throws ResourceNotFoundException {
         bucketListService.deleteBucketList(bucketListId);
         return ResponseEntity.status(HttpStatus.OK).body(String.format("Bucket List with id %d deleted", bucketListId));
     }
@@ -99,7 +99,7 @@ public class BucketListController {
     @ApiOperation(value = "create bucket list item", response = BucketListItem.class)
     @PostMapping("{id}/items")
     public ResponseEntity<BucketListItem> createBucketListItem(@ApiParam(value = "bucket list id", required = true)
-                                                                   @PathVariable("id") Integer bucketListId,
+                                                                   @PathVariable("id") Long bucketListId,
                                                                @ApiParam(value = "bucket list item request body", required = true)
                                                                @NotNull @Valid @RequestBody BucketListItemDto dto)
             throws NotCreatedException {
@@ -109,7 +109,7 @@ public class BucketListController {
     @ApiOperation(value = "fetch bucket list items assigned to a bucket list", response = List.class)
     @GetMapping("{id}/items")
     public ResponseEntity<List<BucketListItem>> getBucketListItems(@ApiParam(value = "bucket list id", required = true)
-                                                                       @PathVariable("id") Integer bucketListId,
+                                                                       @PathVariable("id") Long bucketListId,
                                                 @ApiParam(value = "page") @RequestParam("page") Optional<Integer> page,
                                                 @ApiParam(value = "limit") @RequestParam("limit") Optional<Integer> limit) {
         List<BucketListItem> bucketItems;
@@ -123,9 +123,9 @@ public class BucketListController {
     @ApiOperation(value = "fetch single bucket list item", response = BucketListItem.class)
     @GetMapping("{id}/items/{bucketItemId}")
     public ResponseEntity<BucketListItem> getBucketListItem(@ApiParam(value = "bucket list id", required = true)
-                                                                @PathVariable("id") Integer bucketListId,
+                                                                @PathVariable("id") Long bucketListId,
                                                @ApiParam(value = "bucket list item id", required = true)
-                                                        @PathVariable("bucketItemId") Integer bucketListItemId) throws ResourceNotFoundException {
+                                                        @PathVariable("bucketItemId") Long bucketListItemId) throws ResourceNotFoundException {
         return ResponseEntity.ok(itemRepository.findById(bucketListItemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Bucket Item does not exist")));
     }
@@ -133,21 +133,21 @@ public class BucketListController {
     @ApiOperation(value = "update bucket list item", response = BucketListItem.class)
     @PutMapping("{id}/items/{bucketItemId}")
     public ResponseEntity<BucketListItem> updateBucketListItem(@ApiParam(value = "bucket list id", required = true)
-                                                                   @PathVariable("id") Integer bucketListId,
+                                                                   @PathVariable("id") Long bucketListId,
                                               @ApiParam(value = "bucket item id", required = true)
-                                                    @PathVariable("bucketItemId") Integer bucketItemId,
+                                                    @PathVariable("bucketItemId") Long bucketItemId,
                                               @ApiParam(value = "bucket item request body", required = true)
                                                                    @Valid @RequestBody BucketListItemDto dto) throws ResourceNotFoundException {
         dto.setId(bucketItemId);
         return ResponseEntity.ok(itemService.updateItem(dto));
     }
 
-    @ApiOperation(value = "delete bucket list item")
+    @ApiOperation(value = "delete bucket list item", response = String.class)
     @DeleteMapping("{id}/items/{bucketItemId}")
     public ResponseEntity<?> deleteBucketList(@ApiParam(value = "bucket list id", required = true)
-                                                  @PathVariable("id") Integer bucketListId,
+                                                  @PathVariable("id") Long bucketListId,
                                               @ApiParam(value = "bucket item id", required = true)
-                                                @PathVariable("bucketItemId") Integer bucketItemId) throws ResourceNotFoundException {
+                                                @PathVariable("bucketItemId") Long bucketItemId) throws ResourceNotFoundException {
         itemService.deleteItem(bucketItemId);
         return ResponseEntity.status(HttpStatus.OK).body(String.format("Bucket item of id %d has been deleted", bucketItemId));
     }

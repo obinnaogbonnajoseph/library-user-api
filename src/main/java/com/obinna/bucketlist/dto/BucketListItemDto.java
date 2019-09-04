@@ -1,24 +1,29 @@
 package com.obinna.bucketlist.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class BucketListItemDto {
 
-    private int id;
+    private Long id;
 
+    @NotBlank
     private String name;
 
+    @NotNull
     private Date dateCreated;
 
+    @NotNull
     private Date dateModified;
 
     private boolean done = false;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

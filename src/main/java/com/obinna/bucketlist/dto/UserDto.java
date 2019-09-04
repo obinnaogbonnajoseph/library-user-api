@@ -1,16 +1,25 @@
 package com.obinna.bucketlist.dto;
 
+import com.obinna.bucketlist.model.Role;
+
+import javax.validation.constraints.NotBlank;
+import java.util.List;
+
 public class UserDto {
 
     private String firstName;
 
     private String lastName;
 
+    @NotBlank
     private String username;
 
     private String email;
 
+    @NotBlank
     private String password;
+
+    private List<Role> roles;
 
     public String getFirstName() {
         return firstName;
@@ -51,4 +60,8 @@ public class UserDto {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public List<Role> getRoles() { return roles; }
+
+    public void setRoles(List<Role> roles) { this.roles = roles; }
 }

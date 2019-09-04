@@ -14,37 +14,37 @@ public class BucketListBucketItemMapper {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @ApiModelProperty(notes = "bucket list id")
     @Column(name = "bucket_list_id")
-    private int bucketListId;
+    private Long bucketListId;
 
     @ApiModelProperty(notes = "bucket list item id")
     @Column(name = "bucket_list_item_id")
-    private int bucketItemId;
+    private Long bucketItemId;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getBucketListId() {
+    public Long getBucketListId() {
         return bucketListId;
     }
 
-    public void setBucketListId(int bucketListId) {
+    public void setBucketListId(Long bucketListId) {
         this.bucketListId = bucketListId;
     }
 
-    public int getBucketItemId() {
+    public Long getBucketItemId() {
         return bucketItemId;
     }
 
-    public void setBucketItemId(int bucketItemId) {
+    public void setBucketItemId(Long bucketItemId) {
         this.bucketItemId = bucketItemId;
     }
 }
