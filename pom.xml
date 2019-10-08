@@ -9,10 +9,11 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.obinna</groupId>
-    <artifactId>bucket-list</artifactId>
+    <artifactId>library-user</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>bucket-list</name>
-    <description>API for bucket list</description>
+    <name>library-user</name>
+    <packaging>jar</packaging>
+    <description>API for library user</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -93,6 +94,11 @@
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>
             <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.5</version>
         </dependency>
     </dependencies>
 
