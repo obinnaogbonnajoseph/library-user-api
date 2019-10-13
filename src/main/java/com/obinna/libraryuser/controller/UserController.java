@@ -1,17 +1,16 @@
 package com.obinna.libraryuser.controller;
 
+import com.obinna.libraryuser.dao.AppRepository;
 import com.obinna.libraryuser.dto.LoginRequestDto;
 import com.obinna.libraryuser.dto.LoginSuccessDto;
+import com.obinna.libraryuser.model.QUser;
 import com.obinna.libraryuser.model.User;
 import com.obinna.libraryuser.repository.UserRepository;
 import com.obinna.libraryuser.service.UserService;
+import com.querydsl.jpa.impl.JPAQuery;
 import io.swagger.annotations.*;
-import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +29,9 @@ public class UserController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private AppRepository appRepository;
 
     @PostMapping("/login")
     @ApiOperation(value = "Authenticates user and returns jwt token")
@@ -61,25 +63,13 @@ public class UserController {
                                                      @ApiParam(value = "page") @RequestParam("page") Optional<Integer> page,
                                                      @ApiParam(value = "limit") @RequestParam("limit") Optional<Integer> limit) {
 
-        List<User> users;
-        int limitFetch = limit.map(integer -> (integer > 100 ? 100 : integer)).orElse(20); // place a minimum restriction of 20, max restriction of 100
-        Pageable pagination = PageRequest.of(page.orElse(0), limitFetch,
-                Sort.Direction.ASC, "username");
-
-        String searchName = username.orElse("");
-        String searchUserId = userId.orElse("");
-        if(StringUtils.isNoneBlank(searchName, searchUserId)) {
-            users = userRepository.findAllByUsernameContainsAndId(searchName, Long.valueOf(searchUserId), pagination);
-        }
-        else if(StringUtils.isBlank(searchName) && StringUtils.isNotBlank(searchUserId)) {
-            User user = userRepository.findById(Long.valueOf(searchUserId)).orElse(null);
-            users = new ArrayList<>(Arrays.asList(user));
-        }
-        else if(StringUtils.isBlank(searchUserId) && StringUtils.isNotBlank(searchName)) {
-            users = userRepository.findAllByUsernameContains(searchName, pagination);
-        }
-        else users = Collections.EMPTY_LIST;
-        return ResponseEntity.ok(users);
+        QUser user = QUser.user;
+        JPAQuery<User> userJPAQuery = appRepository.startJPAQuery(user);
+        username.ifPresent(searchUsername -> userJPAQuery.where(user.username.containsIgnoreCase(searchUsername)));
+        userId.ifPresent(id -> userJPAQuery.where(user.id.eq(Long.valueOf(id))));
+        userJPAQuery.limit(limit.orElse(10));
+        userJPAQuery.offset(page.orElse(0));
+        return ResponseEntity.ok(appRepository.fetchResultList(userJPAQuery));
     }
 
     /*@PostMapping("/sign-up")

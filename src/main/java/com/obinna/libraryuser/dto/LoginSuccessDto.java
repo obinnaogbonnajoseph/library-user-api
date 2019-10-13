@@ -2,7 +2,16 @@ package com.obinna.libraryuser.dto;
 
 import com.obinna.libraryuser.model.User;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class LoginSuccessDto {
+
+    @NotBlank
+    private String token;
+
+    @NotNull
+    private User user;
 
     public String getToken() {
         return token;
@@ -19,7 +28,4 @@ public class LoginSuccessDto {
     public void setUser(User user) {
         this.user = user;
     }
-
-    private String token;
-    private User user;
 }

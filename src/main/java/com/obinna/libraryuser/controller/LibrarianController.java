@@ -1,18 +1,18 @@
 package com.obinna.libraryuser.controller;
 
+import com.obinna.libraryuser.dao.AppRepository;
 import com.obinna.libraryuser.dto.BookDto;
 import com.obinna.libraryuser.model.Book;
+import com.obinna.libraryuser.model.QBook;
 import com.obinna.libraryuser.repository.BookRepository;
 import com.obinna.libraryuser.service.BookService;
 import com.obinna.libraryuser.utils.NotCreatedException;
 import com.obinna.libraryuser.utils.ResourceNotFoundException;
+import com.querydsl.jpa.impl.JPAQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +28,13 @@ import java.util.Optional;
 public class LibrarianController {
 
     @Autowired
-    BookService bookService;
+    private BookService bookService;
 
     @Autowired
-    BookRepository bookRepository;
+    private BookRepository bookRepository;
+
+    @Autowired
+    private AppRepository appRepository;
 
     @ApiOperation(value = "create a new book", response = Book.class)
     @PostMapping()
@@ -48,16 +51,13 @@ public class LibrarianController {
                                                      @ApiParam(value = "author") @RequestParam("author") Optional<String> author,
                                                      @ApiParam(value = "page") @RequestParam("page") Optional<Integer> page,
                                                      @ApiParam(value = "limit") @RequestParam("limit") Optional<Integer> limit) {
-
-        List<Book> books;
-        int limitFetch = limit.map(integer -> (integer > 100 ? 100 : integer)).orElse(20); // place a minimum restriction of 20, max restriction of 100
-        Pageable pagination = PageRequest.of(page.orElse(0), limitFetch,
-                Sort.Direction.ASC, "name");
-
-        String searchName = bookName.orElse("");
-        String searchAuthor = author.orElse("");
-        books = bookRepository.findBooksByNameAndAuthor(searchName, searchAuthor, pagination);
-        return ResponseEntity.ok(books);
+        QBook book = QBook.book;
+        JPAQuery<Book> bookJPAQuery = appRepository.startJPAQuery(book);
+        bookName.ifPresent(nameOfBook -> bookJPAQuery.where(book.name.containsIgnoreCase(nameOfBook)));
+        author.ifPresent(searchAuthor -> bookJPAQuery.where(book.author.containsIgnoreCase(searchAuthor)));
+        bookJPAQuery.limit(limit.orElse(10));
+        bookJPAQuery.offset(page.orElse(0));
+        return ResponseEntity.ok(appRepository.fetchResultList(bookJPAQuery));
     }
 
     @ApiOperation(value = "fetch single book", response = Book.class)

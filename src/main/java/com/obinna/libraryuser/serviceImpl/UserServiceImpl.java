@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
             String token = jwtTokenProvider.createToken(username, userRepository.findByUsername(username)
                     .orElseThrow(() -> new CustomException("User with username: '" + username + "' does not exist", HttpStatus.NOT_FOUND))
                     .getRoles());
-            User user = currentUser();
+            User user = currentUser(token);
             LoginSuccessDto successDto = new LoginSuccessDto();
             successDto.setToken(token);
             successDto.setUser(user);
@@ -67,6 +67,12 @@ public class UserServiceImpl implements UserService {
             throw new CustomException("Username is already in use", HttpStatus.BAD_REQUEST);
         }*/
         return getEncodedPassword(user.getPassword());
+    }
+
+    @Override
+    public User currentUser(String bearerToken) {
+        return userRepository.findByUsername(jwtTokenProvider.getUsername(bearerToken))
+                .orElseThrow(() -> new CustomException("User not found", HttpStatus.NOT_FOUND));
     }
 
     @Override

@@ -11,5 +11,7 @@ public interface UserService {
 
     String signUp(User user);
 
+    User currentUser(String bearerToken);
+
     User currentUser();
 }
