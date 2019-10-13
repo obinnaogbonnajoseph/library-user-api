@@ -62,7 +62,7 @@ public class LibrarianController {
 
     @ApiOperation(value = "fetch single book", response = Book.class)
     @GetMapping("{id}")
-    public ResponseEntity<Book> getBucketList(@ApiParam(value = "bucket list id", required = true)
+    public ResponseEntity<Book> getBucketList(@ApiParam(value = "book id", required = true)
                                                         @PathVariable("id") Long bookId) throws ResourceNotFoundException {
         return ResponseEntity.ok(bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book does not exist")));

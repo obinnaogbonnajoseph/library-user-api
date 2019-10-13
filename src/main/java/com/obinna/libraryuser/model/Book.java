@@ -2,15 +2,13 @@ package com.obinna.libraryuser.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
-@Table(name = "bucket_list")
-@ApiModel(description = "Details of a bucket list")
-public class Book {
+@Table(name = "book")
+@ApiModel(description = "Details of book")
+public class Book extends Auditable {
 
     @ApiModelProperty(notes = "primary key of book entity")
     @Id
@@ -33,13 +31,6 @@ public class Book {
     @ApiModelProperty(notes = "status of book entity")
     @Column(name = "status", nullable = false)
     private String status;
-
-
-    @ApiModelProperty(notes = "date of creation of bucket list")
-    @Column(name = "date_created", nullable = false)
-    @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateCreated;
 
     public Long getId() {
         return id;
@@ -64,14 +55,6 @@ public class Book {
     public String getLibNumber() { return libNumber; }
 
     public void setLibNumber(String libNumber) { this.libNumber = libNumber; }
-
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
 
     public String getStatus() {
         return status;

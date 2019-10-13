@@ -2,6 +2,7 @@ package com.obinna.libraryuser.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -21,9 +22,6 @@ public class BookDto {
     @NotBlank
     private String status;
 
-    @NotNull
-    private Date dateCreated;
-
     public Long getId() { return id; }
 
     public void setId(Long id) { this.id = id; }
@@ -34,14 +32,6 @@ public class BookDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
     }
 
     public String getAuthor() {
