@@ -1,6 +1,8 @@
 package com.obinna.libraryuser.security;
 
 import com.obinna.libraryuser.utils.CustomException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,6 +18,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private JwtTokenProvider jwtTokenProvider;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
@@ -29,11 +33,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             if(token != null && jwtTokenProvider.validateToken(token)) {
                 Authentication auth = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(auth);
+                logger.info("**************************** Security successfully authenticated ***********************");
             }
         } catch (CustomException ex) {
             // clear context, since the user is not authenticated
             SecurityContextHolder.clearContext();
             httpServletResponse.sendError(ex.getHttpStatus().value(), ex.getMessage());
+            logger.info("**************************** Error occurred, not authenticated ***********************");
             return;
         }
 

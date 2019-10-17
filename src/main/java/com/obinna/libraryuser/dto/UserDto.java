@@ -3,12 +3,15 @@ package com.obinna.libraryuser.dto;
 import com.obinna.libraryuser.model.Role;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class UserDto {
 
+    @NotBlank
     private String firstName;
 
+    @NotBlank
     private String lastName;
 
     @NotBlank
@@ -17,6 +20,7 @@ public class UserDto {
     @NotBlank
     private String password;
 
+    @NotNull
     private List<Role> roles;
 
     public String getFirstName() {

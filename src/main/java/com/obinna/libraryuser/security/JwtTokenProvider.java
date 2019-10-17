@@ -6,6 +6,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -34,6 +36,8 @@ public class JwtTokenProvider {
 
     @Autowired
     private MyUserDetails myUserDetails;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostConstruct
     protected void init() {
@@ -70,16 +74,31 @@ public class JwtTokenProvider {
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
         if(bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            logger.info("*************************** Token not null ************************");
             return bearerToken.substring(7);
         }
+        logger.info("*************************** Token is null ************************");
         return null;
     }
 
     public boolean validateToken(String token) {
         try {
+            Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+            Date dateIssued = claims.getIssuedAt();
+            Date expirationDate = claims.getExpiration();
+            String audience = claims.getAudience();
+            String issuer = claims.getIssuer();
+            String id = claims.getId();
+            logger.info("******** Date issued: {} ********** " +
+                    "\n ******** Expiration date: {} **********" +
+                    "\n ******** Audience: {} **********" +
+                    "\n ******** Issuer: {} **********" +
+                    "\n ******** Id: {} **********", dateIssued, expirationDate, audience, issuer, id);
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token.trim());
+            logger.info("*************************** Token successfully validated ************************");
             return true;
         } catch (JwtException | IllegalArgumentException e) {
+            logger.info("*************************** Token not validated ************************");
             throw new CustomException("Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

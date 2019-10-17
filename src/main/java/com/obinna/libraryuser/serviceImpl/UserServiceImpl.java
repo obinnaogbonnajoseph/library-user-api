@@ -7,6 +7,8 @@ import com.obinna.libraryuser.repository.UserRepository;
 import com.obinna.libraryuser.security.JwtTokenProvider;
 import com.obinna.libraryuser.service.UserService;
 import com.obinna.libraryuser.utils.CustomException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +37,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private HttpServletRequest req;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public LoginSuccessDto signIn(LoginRequestDto requestDto) {
         String username = requestDto.getUsername();
@@ -44,6 +48,7 @@ public class UserServiceImpl implements UserService {
             String token = jwtTokenProvider.createToken(username, userRepository.findByUsername(username)
                     .orElseThrow(() -> new CustomException("User with username: '" + username + "' does not exist", HttpStatus.NOT_FOUND))
                     .getRoles());
+            logger.info("******************* Token created::: {}*************", token);
             User user = currentUser(token);
             LoginSuccessDto successDto = new LoginSuccessDto();
             successDto.setToken(token);
@@ -55,9 +60,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Deprecated
     public String signUp(User user) {
-        /*if (!userRepository.findByUsername(user.getUsername()).isPresent()) {
+        if (!userRepository.findByUsername(user.getUsername()).isPresent()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
             if(user.getId() >= 0) {
@@ -65,8 +69,7 @@ public class UserServiceImpl implements UserService {
             } else throw new CustomException("User could not be created", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
             throw new CustomException("Username is already in use", HttpStatus.BAD_REQUEST);
-        }*/
-        return getEncodedPassword(user.getPassword());
+        }
     }
 
     @Override
@@ -81,7 +84,4 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new CustomException("User not found", HttpStatus.NOT_FOUND));
     }
 
-    public String getEncodedPassword(String password) {
-        return passwordEncoder.encode(password);
-    }
 }

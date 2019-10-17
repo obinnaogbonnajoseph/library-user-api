@@ -8,6 +8,7 @@ import com.obinna.libraryuser.repository.BookRepository;
 import com.obinna.libraryuser.service.BookService;
 import com.obinna.libraryuser.utils.NotCreatedException;
 import com.obinna.libraryuser.utils.ResourceNotFoundException;
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,9 +45,9 @@ public class LibrarianController {
         return ResponseEntity.ok(bookService.createBook(dto));
     }
 
-    @ApiOperation(value = "fetch books", response = List.class)
+    @ApiOperation(value = "fetch books", response = QueryResults.class)
     @GetMapping()
-    public ResponseEntity<List<Book>> getBucketLists(@ApiParam(value = "book name")
+    public ResponseEntity<?> getBucketLists(@ApiParam(value = "book name")
                                                                @RequestParam("name") Optional<String> bookName,
                                                      @ApiParam(value = "author") @RequestParam("author") Optional<String> author,
                                                      @ApiParam(value = "page") @RequestParam("page") Optional<Integer> page,
@@ -57,7 +58,7 @@ public class LibrarianController {
         author.ifPresent(searchAuthor -> bookJPAQuery.where(book.author.containsIgnoreCase(searchAuthor)));
         bookJPAQuery.limit(limit.orElse(10));
         bookJPAQuery.offset(page.orElse(0));
-        return ResponseEntity.ok(appRepository.fetchResultList(bookJPAQuery));
+        return ResponseEntity.ok(appRepository.fetchResults(bookJPAQuery));
     }
 
     @ApiOperation(value = "fetch single book", response = Book.class)
@@ -83,6 +84,6 @@ public class LibrarianController {
     public ResponseEntity<?> deleteBucketList(@ApiParam(value = "book id", required = true)
                                                   @PathVariable("id") Long bookId) throws ResourceNotFoundException {
         bookService.deleteBook(bookId);
-        return ResponseEntity.status(HttpStatus.OK).body(String.format("Book with id %d deleted", bookId));
+        return ResponseEntity.ok("");
     }
 }

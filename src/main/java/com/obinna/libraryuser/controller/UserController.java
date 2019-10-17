@@ -3,10 +3,11 @@ package com.obinna.libraryuser.controller;
 import com.obinna.libraryuser.dao.AppRepository;
 import com.obinna.libraryuser.dto.LoginRequestDto;
 import com.obinna.libraryuser.dto.LoginSuccessDto;
+import com.obinna.libraryuser.dto.UserDto;
 import com.obinna.libraryuser.model.QUser;
 import com.obinna.libraryuser.model.User;
-import com.obinna.libraryuser.repository.UserRepository;
 import com.obinna.libraryuser.service.UserService;
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQuery;
 import io.swagger.annotations.*;
 import org.modelmapper.ModelMapper;
@@ -27,6 +28,9 @@ public class UserController {
 
     @Autowired
     private AppRepository appRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @PostMapping("/login")
     @ApiOperation(value = "Authenticates user and returns jwt token")
@@ -50,9 +54,9 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "fetch users", response = List.class)
+    @ApiOperation(value = "fetch users", response = QueryResults.class)
     @GetMapping()
-    public ResponseEntity<List<User>> getBucketLists(@ApiParam(value = "user name")
+    public ResponseEntity<?> getBucketLists(@ApiParam(value = "user name")
                                                      @RequestParam("username") Optional<String> username,
                                                      @ApiParam(value = "userId") @RequestParam("userId") Optional<String> userId,
                                                      @ApiParam(value = "page") @RequestParam("page") Optional<Integer> page,
@@ -64,10 +68,10 @@ public class UserController {
         userId.ifPresent(id -> userJPAQuery.where(user.id.eq(Long.valueOf(id))));
         userJPAQuery.limit(limit.orElse(10));
         userJPAQuery.offset(page.orElse(0));
-        return ResponseEntity.ok(appRepository.fetchResultList(userJPAQuery));
+        return ResponseEntity.ok(appRepository.fetchResults(userJPAQuery));
     }
 
-    /*@PostMapping("/sign-up")
+    @PostMapping("/sign-up")
     @ApiOperation(value = "Creates user and returns jwt token")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
@@ -76,7 +80,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
     public ResponseEntity<String> signUp(@ApiParam("Signup User") @RequestBody UserDto user) {
         return ResponseEntity.ok(userService.signUp(modelMapper.map(user, User.class)));
-    }*/
+    }
 
     /*public static void main(String[] args) {
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
