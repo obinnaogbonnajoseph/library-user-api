@@ -14,13 +14,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Optional;
 
 @Api(value = "Librarian User API")
@@ -47,7 +45,7 @@ public class LibrarianController {
 
     @ApiOperation(value = "fetch books", response = QueryResults.class)
     @GetMapping()
-    public ResponseEntity<?> getBucketLists(@ApiParam(value = "book name")
+    public ResponseEntity<?> getBooks(@ApiParam(value = "book name")
                                                                @RequestParam("name") Optional<String> bookName,
                                                      @ApiParam(value = "author") @RequestParam("author") Optional<String> author,
                                                      @ApiParam(value = "page") @RequestParam("page") Optional<Integer> page,
@@ -58,12 +56,13 @@ public class LibrarianController {
         author.ifPresent(searchAuthor -> bookJPAQuery.where(book.author.containsIgnoreCase(searchAuthor)));
         bookJPAQuery.limit(limit.orElse(10));
         bookJPAQuery.offset(page.orElse(0));
+        bookJPAQuery.orderBy(book.dateCreated.asc());
         return ResponseEntity.ok(appRepository.fetchResults(bookJPAQuery));
     }
 
     @ApiOperation(value = "fetch single book", response = Book.class)
     @GetMapping("{id}")
-    public ResponseEntity<Book> getBucketList(@ApiParam(value = "book id", required = true)
+    public ResponseEntity<Book> getBook(@ApiParam(value = "book id", required = true)
                                                         @PathVariable("id") Long bookId) throws ResourceNotFoundException {
         return ResponseEntity.ok(bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book does not exist")));
@@ -71,7 +70,7 @@ public class LibrarianController {
 
     @ApiOperation(value = "update book", response = Book.class)
     @PutMapping("{id}")
-    public ResponseEntity<Book> updateBucketList(@ApiParam(value = "book id", required = true)
+    public ResponseEntity<Book> updateBook(@ApiParam(value = "book id", required = true)
                                                            @PathVariable("id") Long bookId,
                                                  @ApiParam(value = "book request body", required = true)
                                                             @Valid @RequestBody BookDto dto) throws ResourceNotFoundException {
@@ -81,7 +80,7 @@ public class LibrarianController {
 
     @ApiOperation(value = "delete book", response = String.class)
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteBucketList(@ApiParam(value = "book id", required = true)
+    public ResponseEntity<?> deleteBook(@ApiParam(value = "book id", required = true)
                                                   @PathVariable("id") Long bookId) throws ResourceNotFoundException {
         bookService.deleteBook(bookId);
         return ResponseEntity.ok("");

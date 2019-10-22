@@ -25,7 +25,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     @Autowired
     private AppRepository appRepository;
 
@@ -56,7 +55,7 @@ public class UserController {
 
     @ApiOperation(value = "fetch users", response = QueryResults.class)
     @GetMapping()
-    public ResponseEntity<?> getBucketLists(@ApiParam(value = "user name")
+    public ResponseEntity<?> getUsers(@ApiParam(value = "user name")
                                                      @RequestParam("username") Optional<String> username,
                                                      @ApiParam(value = "userId") @RequestParam("userId") Optional<String> userId,
                                                      @ApiParam(value = "page") @RequestParam("page") Optional<Integer> page,
@@ -68,18 +67,20 @@ public class UserController {
         userId.ifPresent(id -> userJPAQuery.where(user.id.eq(Long.valueOf(id))));
         userJPAQuery.limit(limit.orElse(10));
         userJPAQuery.offset(page.orElse(0));
+        userJPAQuery.orderBy(user.dateCreated.asc());
         return ResponseEntity.ok(appRepository.fetchResults(userJPAQuery));
     }
 
     @PostMapping("/sign-up")
-    @ApiOperation(value = "Creates user and returns jwt token")
+    @ApiOperation(value = "Creates user")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 422, message = "Username is already in use"), //
             @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-    public ResponseEntity<String> signUp(@ApiParam("Signup User") @RequestBody UserDto user) {
-        return ResponseEntity.ok(userService.signUp(modelMapper.map(user, User.class)));
+    public ResponseEntity<?> signUp(@ApiParam("Signup User") @RequestBody UserDto user) {
+        userService.signUp(modelMapper.map(user, User.class));
+        return ResponseEntity.ok("");
     }
 
     /*public static void main(String[] args) {

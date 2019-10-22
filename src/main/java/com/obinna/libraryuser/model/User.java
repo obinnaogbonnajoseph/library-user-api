@@ -9,7 +9,7 @@ import java.util.List;
 @ApiModel(description = "user entity that creates bucket list")
 @Entity
 @Table(name = "library_user")
-public class User {
+public class User extends Auditable {
 
     @ApiModelProperty(notes = "primary key of user entity")
     @Id

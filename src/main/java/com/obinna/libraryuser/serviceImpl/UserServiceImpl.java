@@ -60,13 +60,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String signUp(User user) {
+    public void signUp(User user) {
         if (!userRepository.findByUsername(user.getUsername()).isPresent()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
-            if(user.getId() >= 0) {
-                return jwtTokenProvider.createToken(user.getUsername(), user.getRoles());
-            } else throw new CustomException("User could not be created", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
             throw new CustomException("Username is already in use", HttpStatus.BAD_REQUEST);
         }

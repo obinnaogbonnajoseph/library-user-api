@@ -9,7 +9,7 @@ public interface UserService {
 
     LoginSuccessDto signIn(LoginRequestDto requestDto);
 
-    String signUp(User user);
+    void signUp(User user);
 
     User currentUser(String bearerToken);
 
