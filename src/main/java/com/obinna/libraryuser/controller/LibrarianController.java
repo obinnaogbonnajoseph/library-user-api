@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,6 +36,7 @@ public class LibrarianController {
     @Autowired
     private AppRepository appRepository;
 
+    @PreAuthorize("hasAnyAuthority('CREATE_BOOKS', 'MODIFY_BOOKS')")
     @ApiOperation(value = "create a new book", response = Book.class)
     @PostMapping()
     public ResponseEntity<Book> createBook(@ApiParam(value = "book body", required = true)
@@ -68,6 +70,7 @@ public class LibrarianController {
                 .orElseThrow(() -> new ResourceNotFoundException("Book does not exist")));
     }
 
+    @PreAuthorize("hasAnyAuthority('CREATE_BOOKS', 'MODIFY_BOOKS')")
     @ApiOperation(value = "update book", response = Book.class)
     @PutMapping("{id}")
     public ResponseEntity<Book> updateBook(@ApiParam(value = "book id", required = true)
@@ -78,6 +81,7 @@ public class LibrarianController {
         return ResponseEntity.ok(bookService.updateBook(dto));
     }
 
+    @PreAuthorize("hasAnyAuthority('CREATE_BOOKS', 'MODIFY_BOOKS')")
     @ApiOperation(value = "delete book", response = String.class)
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteBook(@ApiParam(value = "book id", required = true)
