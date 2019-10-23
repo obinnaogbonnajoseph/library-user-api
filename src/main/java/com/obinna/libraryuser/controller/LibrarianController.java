@@ -70,7 +70,6 @@ public class LibrarianController {
                 .orElseThrow(() -> new ResourceNotFoundException("Book does not exist")));
     }
 
-    @PreAuthorize("hasAnyAuthority('CREATE_BOOKS', 'MODIFY_BOOKS')")
     @ApiOperation(value = "update book", response = Book.class)
     @PutMapping("{id}")
     public ResponseEntity<Book> updateBook(@ApiParam(value = "book id", required = true)
